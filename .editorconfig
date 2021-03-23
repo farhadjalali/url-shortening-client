@@ -1,6 +1,6 @@
 # EditorConfig.eslintrc.json
-node_modules
 dist
+node_modules
 coverage/
 *.map
 .idea

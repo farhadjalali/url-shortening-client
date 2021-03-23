@@ -5,8 +5,8 @@ import "../css/Home.css"
 import ShortenUrl from "./ShortenUrl";
 
 export class Home extends React.Component {
-    constructor() {
-        super({})
+    constructor(props: any) {
+        super(props)
 
         this.longUrlChanged = this.longUrlChanged.bind(this)
         this.gotShortenedUrl = this.gotShortenedUrl.bind(this)
@@ -51,8 +51,8 @@ export class Home extends React.Component {
 
                         {/* Url to shorten */}
                         <div className="input-group">
-                            <input value={this.state.longUrl} onChange={this.longUrlChanged} type="text" className="form-control"
-                                   placeholder="Your original URL here" aria-label="URL" aria-describedby="basic-addon2"/>
+                            <input value={this.state.longUrl} onChange={this.longUrlChanged} type="text" className="form-control" data-testid="long-url-input"
+                                   placeholder="Your original URL here" aria-label="URL" aria-describedby="basic-addon"/>
                             <div className="input-group-append">
                                 <ShortenUrl longUrl={this.state.longUrl} abTestVariant={this.abTestVariant} gotUrl={this.gotShortenedUrl}/>
                             </div>

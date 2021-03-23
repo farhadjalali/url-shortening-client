@@ -8,6 +8,7 @@ export default function ShortenUrl(props: {
     gotUrl: (err?: string | null, link?: ILink) => void
 }): JSX.Element {
 
+    // Graphql Mutation
     const [callShortenUrl] = useMutation(gql`
         mutation ShortenUrl($longUrl: String!) {
             shortenUrl(longUrl: $longUrl){
@@ -18,8 +19,8 @@ export default function ShortenUrl(props: {
     `)
 
     return (
-        <button className="btn btn-warning text-uppercase" onClick={async () => {
-            if (!Constants.urlRegex.test(props.longUrl)) {
+        <button className="btn btn-warning text-uppercase shorten-url" onClick={async () => {
+            if (!Constants.URL_REGEX.test(props.longUrl)) {
                 props.gotUrl("Please enter a valid url")
                 return
             }
@@ -36,14 +37,14 @@ export default function ShortenUrl(props: {
                 case AbTestVariant.B: {
                     const content = {
                         long_url: props.longUrl,
-                        domain: Constants.BITLY_DOMAIN
+                        domain: process.env.BITLY_DOMAIN
                     }
 
                     // Call Bitly api
-                    fetch(Constants.BITLY_API_URL, {
+                    fetch(process.env.BITLY_API_URL as string, {
                         method: 'POST',
                         headers: {
-                            'Authorization': `Bearer ${Constants.BITLY_TOKEN}`,
+                            'Authorization': `Bearer ${process.env.BITLY_TOKEN}`,
                             'Content-Type': 'application/json'
                         },
                         body: JSON.stringify(content)

@@ -7,9 +7,15 @@ import {App} from "./components/App";
 import {PrivacyPolicy} from "./components/PrivacyPolicy";
 import {Terms} from "./components/Terms";
 import {ApolloClient, ApolloProvider, InMemoryCache} from '@apollo/client';
+import env from "dotenv";
+import assert from "assert";
+
+env.config()
+
+assert(process.env.REACT_APP_SERVER_URL, 'Environment variable "REACT_APP_SERVER_URL" is expected')
 
 const client = new ApolloClient({
-    uri: 'http://localhost:3400/graphql',
+    uri: process.env.REACT_APP_SERVER_URL,
     cache: new InMemoryCache(),
 });
 
