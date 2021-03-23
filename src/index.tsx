@@ -1,8 +1,6 @@
 import React from "react";
 import {render} from "react-dom";
 import {Route, BrowserRouter as Router} from "react-router-dom";
-import "bootstrap/dist/css/bootstrap.css"
-import "./index.css";
 import {Home} from "./components/Home";
 import reportWebVitals from "./reportWebVitals";
 import {App} from "./components/App";
@@ -14,19 +12,6 @@ const client = new ApolloClient({
     uri: 'http://localhost:3400/graphql',
     cache: new InMemoryCache(),
 });
-
-// client.query({
-//     query: gql`
-//         query ExpandUrl {
-//             expandUrl(hash: "cjme") {
-//                 id
-//                 url
-//                 hash
-//             }
-//         }
-//     `
-// })
-// .then(result => console.log(result.data.expandUrl));
 
 render(
     <React.StrictMode>

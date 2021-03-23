@@ -1,45 +1,15 @@
 import React, {ChangeEvent} from "react"
 import {Link} from "react-router-dom"
-import {gql, useMutation} from '@apollo/client'
-import {Constants, ILink} from "../types";
-import "./Home.css"
+import {ILink, AbTestVariant} from "../types";
+import "../css/Home.css"
+import ShortenUrl from "./ShortenUrl";
 
-const SHORTEN_URL = gql`
-    mutation ShortenUrl($longUrl: String!) {
-        shortenUrl(longUrl: $longUrl){
-            id
-            url
-            hash
-        }
-    }
-`
-
-function ShortenUrl(props: { longUrl: string, result: (err?: string | null, link?: ILink) => void }) {
-    const [callShortenUrl] = useMutation(SHORTEN_URL)
-
-    return (
-        <button onClick={async () => {
-            if (!Constants.urlRegex.test(props.longUrl)) {
-                props.result("Please enter a valid url")
-                return
-            }
-
-            const res = await callShortenUrl({variables: {longUrl: props.longUrl}})
-            res.errors
-            props.result(null, res.data)
-
-        }} className="btn btn-warning text-uppercase" type="button">Shorten Url
-        </button>
-    )
-}
-
-export class Home extends React.Component<{ onTemperatureChange: (value: string) => void }> {
-
-    constructor(props: { onTemperatureChange: (value: string) => void }) {
-        super(props)
+export class Home extends React.Component {
+    constructor() {
+        super({})
 
         this.longUrlChanged = this.longUrlChanged.bind(this)
-        this.onShortenUrl = this.onShortenUrl.bind(this)
+        this.gotShortenedUrl = this.gotShortenedUrl.bind(this)
     }
 
     state = {
@@ -48,16 +18,23 @@ export class Home extends React.Component<{ onTemperatureChange: (value: string)
         links: [] as ILink[]
     }
 
-    onShortenUrl(err?: string | null, link?: ILink): void {
+    // fields considering A/B test
+    private abTestVariantCounter = 0
+    private abTestVariant = AbTestVariant.A
+
+    gotShortenedUrl(err?: string | null, link?: ILink): void {
         if (err) {
             this.setState({message: err})
-            return
+        } else if (link) {
+            const links = [...this.state.links, link]
+            this.setState({links, message: ""})
         }
 
-        if (link) {
-            const joined = this.state.links.concat(link)
-            this.setState({links: joined})
-        }
+        // Set A/B test variant for next call
+        // A (70%) : Internal API
+        // B (30%) : Bitly API
+        this.abTestVariantCounter++
+        this.abTestVariant = (this.abTestVariantCounter % 10 < 3) ? AbTestVariant.B : AbTestVariant.A
     }
 
     longUrlChanged(ev: ChangeEvent<HTMLInputElement>): void {
@@ -66,7 +43,9 @@ export class Home extends React.Component<{ onTemperatureChange: (value: string)
 
     render(): JSX.Element {
         return (
-            <div>
+            <div className="form-home">
+
+                {/* Shorten url */}
                 <div className="p-5 bg-secondary">
                     <div className="container">
 
@@ -75,7 +54,7 @@ export class Home extends React.Component<{ onTemperatureChange: (value: string)
                             <input value={this.state.longUrl} onChange={this.longUrlChanged} type="text" className="form-control"
                                    placeholder="Your original URL here" aria-label="URL" aria-describedby="basic-addon2"/>
                             <div className="input-group-append">
-                                <ShortenUrl longUrl={this.state.longUrl} result={this.onShortenUrl}/>
+                                <ShortenUrl longUrl={this.state.longUrl} abTestVariant={this.abTestVariant} gotUrl={this.gotShortenedUrl}/>
                             </div>
                         </div>
 
@@ -96,16 +75,16 @@ export class Home extends React.Component<{ onTemperatureChange: (value: string)
                         }
                     </div>
                 </div>
-                <div className="py-5 container bg-light">
+
+                {/* Shortened links table */}
+                <div className="py-5 container">
                     {
-                        this.state.links.map(link => {
-                            return (
-                                <div key={link.id} className="link-item">
-                                    <div className="small text-secondary">{link.url}</div>
-                                    <div className="text-dark">{link.hash}</div>
-                                </div>
-                            )
-                        })
+                        this.state.links.reverse().map((link, index) =>
+                            <div key={index} className="link-item border-bottom py-2">
+                                <div className="small text-secondary"><b>Original Url:</b> {link.longUrl}</div>
+                                <div className="text-dark">{link.url}</div>
+                            </div>
+                        )
                     }
                 </div>
             </div>

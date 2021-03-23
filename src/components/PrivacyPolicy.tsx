@@ -2,7 +2,7 @@ import React from "react";
 
 export const PrivacyPolicy = (): JSX.Element => {
     return (
-        <div className="p-4 bg-light">
+        <div className="p-4 bg-light form-privacy">
             <div className="container py-5">
                 <h3>Privacy Statement</h3>
                 <p>

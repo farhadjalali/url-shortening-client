@@ -2,7 +2,7 @@ import React from "react";
 
 export const Terms = (): JSX.Element => {
     return (
-        <div className="p-4 bg-light">
+        <div className="p-4 bg-light form-terms">
             <div className="container py-5">
                 <h3>Terms and Conditions</h3>
                 <p>
