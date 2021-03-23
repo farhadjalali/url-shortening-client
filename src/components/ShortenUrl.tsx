@@ -37,14 +37,14 @@ export default function ShortenUrl(props: {
                 case AbTestVariant.B: {
                     const content = {
                         long_url: props.longUrl,
-                        domain: process.env.BITLY_DOMAIN
+                        domain: process.env.REACT_APP_BITLY_DOMAIN
                     }
 
                     // Call Bitly api
-                    fetch(process.env.BITLY_API_URL as string, {
+                    fetch(process.env.REACT_APP_BITLY_API_URL as string, {
                         method: 'POST',
                         headers: {
-                            'Authorization': `Bearer ${process.env.BITLY_TOKEN}`,
+                            'Authorization': `Bearer ${process.env.REACT_APP_BITLY_TOKEN}`,
                             'Content-Type': 'application/json'
                         },
                         body: JSON.stringify(content)
