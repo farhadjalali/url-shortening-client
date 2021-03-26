@@ -4,6 +4,9 @@ import {ILink, AbTestVariant} from "../types";
 import "../css/Home.css"
 import ShortenUrl from "./ShortenUrl";
 
+const AB_TEST_SITUATIONS_ALL = 10
+const AB_TEST_SITUATIONS_B = 3
+
 export class Home extends React.Component {
     constructor(props: any) {
         super(props)
@@ -34,7 +37,7 @@ export class Home extends React.Component {
         // A (70%) : Internal API
         // B (30%) : Bitly API
         this.abTestVariantCounter++
-        this.abTestVariant = (this.abTestVariantCounter % 10 < 3) ? AbTestVariant.B : AbTestVariant.A
+        this.abTestVariant = (this.abTestVariantCounter % AB_TEST_SITUATIONS_ALL < AB_TEST_SITUATIONS_B) ? AbTestVariant.B : AbTestVariant.A
     }
 
     longUrlChanged(ev: ChangeEvent<HTMLInputElement>): void {
