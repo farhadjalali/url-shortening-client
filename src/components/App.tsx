@@ -3,7 +3,7 @@ import {Header} from "./Header"
 import "bootstrap/dist/css/bootstrap.css"
 import "../css/App.css";
 
-export class App extends React.Component {
+export class App extends React.Component<{ children: any }> {
     constructor(props: { children: any }) {
         super(props)
     }

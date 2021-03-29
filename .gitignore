@@ -15,6 +15,6 @@
 *.iml
 
 # misc
-.local.env
+.env.local
 .eslintrc.json
 *.map
