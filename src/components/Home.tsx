@@ -2,10 +2,10 @@ import React, {ChangeEvent} from "react"
 import {Link} from "react-router-dom"
 import {ILink, AbTestVariant} from "../types";
 import "../css/Home.css"
-import ShortenUrl from "./ShortenUrl";
+import {ShortenUrl} from "./ShortenUrl";
 
 const AB_TEST_SITUATIONS_ALL = 10
-const AB_TEST_SITUATIONS_B = 3
+const AB_TEST_SITUATIONS_B = 0
 
 export class Home extends React.Component {
     constructor(props: any) {

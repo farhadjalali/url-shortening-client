@@ -16,7 +16,7 @@ assert(process.env.REACT_APP_SERVER_URL, 'Environment variable "REACT_APP_SERVER
 
 const client = new ApolloClient({
     uri: process.env.REACT_APP_SERVER_URL,
-    cache: new InMemoryCache(),
+    cache: new InMemoryCache()
 });
 
 render(
