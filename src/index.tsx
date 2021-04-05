@@ -1,11 +1,11 @@
 import React from "react";
 import {render} from "react-dom";
 import {Route, BrowserRouter as Router} from "react-router-dom";
-import {Home} from "./components/Home";
+import Home from "./components/Home";
 import reportWebVitals from "./reportWebVitals";
-import {App} from "./components/App";
-import {PrivacyPolicy} from "./components/PrivacyPolicy";
-import {Terms} from "./components/Terms";
+import App from "./components/App";
+import PrivacyPolicy from "./components/PrivacyPolicy";
+import Terms from "./components/Terms";
 import {ApolloClient, ApolloProvider, InMemoryCache} from '@apollo/client';
 import env from "dotenv";
 import assert from "assert";

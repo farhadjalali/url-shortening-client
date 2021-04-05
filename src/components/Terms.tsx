@@ -1,6 +1,6 @@
 import React from "react";
 
-export const Terms = (): JSX.Element => {
+export default function Terms(): JSX.Element {
     return (
         <div className="p-4 bg-light form-terms">
             <div className="container py-5">

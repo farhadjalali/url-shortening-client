@@ -3,17 +3,11 @@ import {Header} from "./Header"
 import "bootstrap/dist/css/bootstrap.css"
 import "../css/App.css";
 
-export class App extends React.Component<{ children: any }> {
-    constructor(props: { children: any }) {
-        super(props)
-    }
-
-    render(): JSX.Element {
-        return (
-            <div className="app d-flex flex-column">
-                <Header/>
-                {this.props.children}
-            </div>
-        )
-    }
+export default function App(props: { children: unknown }): JSX.Element {
+    return (
+        <div className="app d-flex flex-column">
+            <Header/>
+            {props.children}
+        </div>
+    )
 }

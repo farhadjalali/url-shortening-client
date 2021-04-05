@@ -1,6 +1,6 @@
 import {Constants, ILink, AbTestVariant} from "../types";
 import {gql, useMutation} from "@apollo/client";
-import React from "react";
+import React from "react"
 
 const SHORTEN_URL = gql`
     mutation ShortenUrl($longUrl: String!) {
@@ -10,44 +10,36 @@ const SHORTEN_URL = gql`
         }
     }
 `
-
-export class ShortenUrl extends React.Component<{
+export function ShortenUrl(props: {
     longUrl: string,
     abTestVariant: AbTestVariant,
     gotUrl: (err?: string | null, link?: ILink) => void
-}> {
-    constructor(props: {
-        longUrl: string,
-        abTestVariant: AbTestVariant,
-        gotUrl: (err?: string | null, link?: ILink) => void
-    }) {
-        super(props)
+}): JSX.Element {
 
-        this.handleClick = this.handleClick.bind(this)
-    }
-
-    async handleClick() {
-        if (!Constants.URL_REGEX.test(this.props.longUrl)) {
-            this.props.gotUrl("Please enter a valid url")
+    // Todo: check if this is the best place
+    async function handleClick() {
+        if (!Constants.URL_REGEX.test(props.longUrl)) {
+            props.gotUrl("Please enter a valid url")
             return
         }
 
-        switch (this.props.abTestVariant) {
+        switch (props.abTestVariant) {
             // Call Internal API
             case AbTestVariant.A: {
+                // Todo: check useMutation problem
                 const [callShortenUrl] = useMutation(SHORTEN_URL)
                 // TODO: Complete error handling
 
                 try {
                     const res = await callShortenUrl({
                             variables: {
-                                longUrl: this.props.longUrl
+                                longUrl: props.longUrl
                             }
                         }
                     )
-                    this.props.gotUrl(null, res.data.shortenUrl)
+                    props.gotUrl(null, res.data.shortenUrl)
                 } catch (error) {
-                    this.props.gotUrl(error ? error.toString() : null)
+                    props.gotUrl(error ? error.toString() : null)
                 }
                 break
             }
@@ -55,7 +47,7 @@ export class ShortenUrl extends React.Component<{
             // Call Bitly API
             case AbTestVariant.B: {
                 const content = {
-                    long_url: this.props.longUrl,
+                    long_url: props.longUrl,
                     domain: process.env.REACT_APP_BITLY_DOMAIN
                 }
 
@@ -69,16 +61,13 @@ export class ShortenUrl extends React.Component<{
                     body: JSON.stringify(content)
                 })
                     .then(res => res.json())
-                    .then(res => this.props.gotUrl(null, {longUrl: res.long_url, url: res.link}))
-                    .catch(err => this.props.gotUrl(err.toString()))
+                    .then(res => props.gotUrl(null, {longUrl: res.long_url, url: res.link}))
+                    .catch(err => props.gotUrl(err.toString()))
             }
         }
     }
 
-
-    render(): JSX.Element {
-        return (
-            <button className="btn btn-warning text-uppercase shorten-url" onClick={this.handleClick}>Shorten Url</button>
-        )
-    }
+    return (
+        <button className="btn btn-warning text-uppercase shorten-url" onClick={handleClick}>Shorten Url</button>
+    )
 }

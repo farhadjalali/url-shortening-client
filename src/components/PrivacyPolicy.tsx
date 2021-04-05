@@ -1,6 +1,6 @@
-import React from "react";
+import React from "react"
 
-export const PrivacyPolicy = (): JSX.Element => {
+export default function PrivacyPolicy(): JSX.Element {
     return (
         <div className="p-4 bg-light form-privacy">
             <div className="container py-5">
